@@ -26,14 +26,24 @@ RUN apt-get install -y openssh-server -qq --no-install-recommends &&\
 # Expose SSH
 EXPOSE 22
 
+# Setting locale
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen &&\
+    sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen
+
+RUN locale-gen en_US.UTF-8 es_ES.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 ###### USER CREATION #########
 ENV USER_NAME=dev
+ENV USER_HOME=/home/$USER_NAME
 
-RUN useradd $USER_NAME -d /home/$USER_NAME -m -s /bin/bash &&\
+RUN useradd $USER_NAME -d $USER_HOME -m -s /bin/bash &&\
     adduser $USER_NAME sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-
+RUN sudo mkdir $USER_HOME/.ssh
 ########## TERMINAL ##########
 
 # Config TERM
@@ -53,11 +63,11 @@ RUN git clone git://github.com/zolrath/wemux.git /usr/local/share/wemux &&\
 COPY ssh_key_adder.rb /home/dev/ssh_key_adder.rb 
 COPY ssh_start.sh /home/dev/ssh_start.sh
 
-RUN chown dev:dev /home/dev/ssh_key_adder.rb &&\
+###### USER CONFIGURATION #######
+RUN chown -R $USER_NAME:$USER_NAME $USER_HOME &&\
     chmod +x /home/dev/ssh_key_adder.rb &&\
     chmod +x /home/dev/ssh_start.sh 
 
-###### USER CONFIGURATION #######
 USER $USER_NAME
 
 # Dotfiles
@@ -80,20 +90,14 @@ RUN \
     homesick clone eLafo/tmux-dot-files &&\
     homesick symlink --force=true tmux-dot-files
 
-# Setting locale
-RUN locale-gen es_ES.UTF-8 en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-
 #### DEVELOPMENT ENVIRONMENT CONFIGURATION #####
 ENV APP_HOME=/workspace
 ENV GEM_HOME=$APP_HOME/vendor/bundle
 ENV BUNDLE_PATH $GEM_HOME
 ENV BUNDLE_BIN $BUNDLE_PATH/bin
 ENV BUNDLE_APP_CONFIG $APP_HOME/.bundle
-ENV PATH $BUNDLE_BIN:$PATH
+ENV PATH $USER_HOME:$BUNDLE_BIN:$PATH
 
-RUN sudo mkdir $APP_HOME
 VOLUME $APP_HOME
 
 WORKDIR $APP_HOME
