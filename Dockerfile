@@ -5,7 +5,7 @@ MAINTAINER eLafo
 
 RUN apt-get update &&\
     echo "debconf debconf/frontend select Teletype" | debconf-set-selections &&\
-    apt-get install -y -qq --no-install-recommends vim sudo git curl wget build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib
+    apt-get install -y -qq --no-install-recommends vim sudo git curl wget redis-tools build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib
 
 # Install Homesick, through which dotfiles configurations will be installed
 RUN gem install homesick --no-rdoc --no-ri
@@ -102,26 +102,4 @@ VOLUME $APP_HOME
 
 WORKDIR $APP_HOME
 
-#VOLUME /home/dev/app
-# Install the SSH keys of ENV-configured GitHub users before running the SSH
-# server process. See README for SSH instructions.
 CMD echo "Development environment ready"
-
-
-#RUN mkdir ~/.ssh
-# Start by changing the apt otput, as stolen from Discourse's Dockerfiles.
-#RUN echo "debconf debconf/frontend select Teletype" | debconf-set-selections &&\
-# Probably a good idea
-    #apt-get update &&\
-
-# Basic dev tools
-    #apt-get install -y sudo openssh-client git build-essential vim ctags man curl direnv software-properties-common locales bash-completion silversearcher-ag
-
-#RUN useradd dev -d /home/dev -m -s /bin/bash &&\
-    #adduser dev sudo && \
-    #echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-#USER dev
-#WORKDIR /home/dev
-#RUN mkdir /home/dev/.ssh
-
