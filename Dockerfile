@@ -5,7 +5,14 @@ MAINTAINER eLafo
 
 RUN apt-get update &&\
     echo "debconf debconf/frontend select Teletype" | debconf-set-selections &&\
-    apt-get install -y -qq --no-install-recommends vim sudo git curl wget redis-tools build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib nmap net-tools imagemagick libarchive-dev libmagickwand-dev libodbc1 libmysqlclient-dev cmake
+    apt-get install -y -qq --no-install-recommends vim sudo git curl wget redis-tools build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib nmap net-tools imagemagick libarchive-dev libmagickwand-dev libodbc1 libmysqlclient-dev cmake chrpath libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
+
+# Install phantomjs
+ENV PHANTOM_JS "phantomjs-2.1.1-linux-x86_64"
+RUN wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
+    tar xvjf $PHANTOM_JS.tar.bz2 &&\
+    mv $PHANTOM_JS /usr/local/share &&\
+    ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 
 # Install Homesick, through which dotfiles configurations will be installed
 RUN gem install homesick --no-rdoc --no-ri
