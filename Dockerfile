@@ -1,6 +1,21 @@
 FROM ruby:2.3.3-slim
 MAINTAINER eLafo
 
+#### DEVELOPMENT ENVIRONMENT CONFIGURATION #####
+ENV GEM_PATH=$GEM_HOME
+ENV APP_HOME=/workspace
+ENV GEM_HOME=/gems
+ENV GEM_PATH=$GEM_HOME:GEM_PATH
+ENV BUNDLE_PATH $GEM_HOME
+ENV BUNDLE_BIN $BUNDLE_PATH/bin
+ENV BUNDLE_APP_CONFIG $APP_HOME/.bundle
+ENV PATH $USER_HOME:$BUNDLE_BIN:$PATH
+
+###### USER CREATION #########
+ENV USER_NAME=dev
+ENV USER_HOME=/home/$USER_NAME
+
+RUN mkdir $GEM_HOME $APP_HOME
 ######### GENERAL DEVELOPMENT LIBRARIES AND TOOLS #########
 
 RUN apt-get update &&\
@@ -9,7 +24,7 @@ RUN apt-get update &&\
 
 # Install phantomjs
 ENV PHANTOM_JS "phantomjs-2.1.1-linux-x86_64"
-RUN wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
+RUN wget http://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
     tar xvjf $PHANTOM_JS.tar.bz2 &&\
     mv $PHANTOM_JS /usr/local/share &&\
     ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
@@ -42,9 +57,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-###### USER CREATION #########
-ENV USER_NAME=dev
-ENV USER_HOME=/home/$USER_NAME
 
 RUN useradd $USER_NAME -d $USER_HOME -m -s /bin/bash &&\
     adduser $USER_NAME sudo && \
@@ -97,15 +109,6 @@ RUN \
     homesick clone eLafo/tmux-dot-files &&\
     homesick symlink --force=true tmux-dot-files
 
-#### DEVELOPMENT ENVIRONMENT CONFIGURATION #####
-ENV APP_HOME=/workspace
-ENV GEM_HOME=/gems
-ENV BUNDLE_PATH $GEM_HOME
-ENV BUNDLE_BIN $BUNDLE_PATH/bin
-ENV BUNDLE_APP_CONFIG $APP_HOME/.bundle
-ENV PATH $USER_HOME:$BUNDLE_BIN:$PATH
-
-RUN sudo mkdir /gems
 RUN sudo chown -R $USER_NAME:$USER_NAME $GEM_HOME
 
 VOLUME $APP_HOME
