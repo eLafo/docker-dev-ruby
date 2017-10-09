@@ -24,9 +24,11 @@ RUN apt-get update &&\
 
 # Install phantomjs
 ENV PHANTOM_JS "phantomjs-2.1.1-linux-x86_64"
-RUN wget http://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
-    tar xvjf $PHANTOM_JS.tar.bz2 &&\
-    mv $PHANTOM_JS /usr/local/share &&\
+ADD $PHANTOM_JS.tar.bz2 .
+#RUN wget http://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
+#RUN tar xvjf $PHANTOM_JS.tar.bz2 &&\
+env test 1
+RUN mv $PHANTOM_JS /usr/local/share &&\
     ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 
 # Install Homesick, through which dotfiles configurations will be installed
