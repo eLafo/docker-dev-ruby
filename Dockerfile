@@ -20,7 +20,7 @@ RUN mkdir $GEM_HOME $APP_HOME
 
 RUN apt-get update &&\
     echo "debconf debconf/frontend select Teletype" | debconf-set-selections &&\
-    apt-get install -y -qq --no-install-recommends vim sudo git curl wget redis-tools build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib nmap net-tools imagemagick libarchive-dev libmagickwand-dev libodbc1 libmysqlclient-dev cmake chrpath libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev ack exuberant-ctags
+    apt-get install -y -qq --no-install-recommends vim sudo git curl wget redis-tools build-essential ruby-dev software-properties-common bash-completion silversearcher-ag nodejs libpq-dev tzdata libxml2-dev libxslt-dev ssh postgresql postgresql-contrib nmap net-tools imagemagick libarchive-dev libmagickwand-dev libodbc1 libmysqlclient-dev cmake chrpath libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev ack-grep exuberant-ctags
 
 # Install phantomjs
 ENV PHANTOM_JS "phantomjs-2.1.1-linux-x86_64"
