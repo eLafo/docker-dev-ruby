@@ -13,7 +13,7 @@ ENV PATH $USER_HOME:$BUNDLE_BIN:$PATH
 ENV USER_NAME=dev
 ENV USER_HOME=/home/$USER_NAME
 
-RUN mkdir $BUNDLE_HOME $APP_HOME
+RUN mkdir $GEM_HOME $APP_HOME
 ######### GENERAL DEVELOPMENT LIBRARIES AND TOOLS #########
 
 RUN apt-get update &&\
@@ -23,9 +23,7 @@ RUN apt-get update &&\
 # Install phantomjs
 ENV PHANTOM_JS "phantomjs-2.1.1-linux-x86_64"
 ADD $PHANTOM_JS.tar.bz2 .
-#RUN wget http://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2 &&\
-#RUN tar xvjf $PHANTOM_JS.tar.bz2 &&\
-env test 1
+
 RUN mv $PHANTOM_JS /usr/local/share &&\
     ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 
@@ -56,7 +54,6 @@ RUN locale-gen en_US.UTF-8 es_ES.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-
 
 RUN useradd $USER_NAME -d $USER_HOME -m -s /bin/bash &&\
     adduser $USER_NAME sudo && \
